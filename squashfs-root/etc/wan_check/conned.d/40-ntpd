@@ -1,0 +1,14 @@
+#!/bin/sh
+
+logger -p notice -t "wan_check" "40-ntpd: run because internet connect"
+
+for i in `seq 1 10`
+do
+	CONFIGURED=$(uci -q get xiaoqiang.common.CONFIGURED)
+	if [ "$CONFIGURED" == "YES" ]; then
+		[ -x /usr/sbin/ntpsetclock ] && /usr/sbin/ntpsetclock post >/dev/null 2>&1 &
+		return 0
+	fi
+	sleep 2;
+	logger -p notice -t "wan_check" "40-ntpd: wait for CONFIGURED cnt(${i})"
+done

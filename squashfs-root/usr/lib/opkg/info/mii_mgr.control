@@ -1,0 +1,8 @@
+Package: mii_mgr
+Version: 1
+Depends: libc, libssp, librt, libpthread
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/mii_mgr
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 3176
+Description:  An program.

@@ -1,0 +1,8 @@
+Package: messagingagent
+Version: 1.4-1.2
+Depends: libc, libssp, librt, libpthread, libcurl, libstdcpp, libpthread, librt, zlib, libubus, libblobmsg-json, libjson-c, libmbedtls, libev, libopenssl
+Source: package/miwifi/messagingagent
+Section: opt
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 122630
+Description:  messaging agent

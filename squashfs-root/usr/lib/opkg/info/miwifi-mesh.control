@@ -1,0 +1,8 @@
+Package: miwifi-mesh
+Version: 1.0-a
+Depends: libc, libssp, librt, libpthread, libiw, libpthread, liblua, libopenssl, libjson-c, libmtknetlink, sp-lib
+Source: package/miwifi/miwifi-mesh
+Section: net
+Architecture: all
+Installed-Size: 77800
+Description:  miwifi-mesh daemon.

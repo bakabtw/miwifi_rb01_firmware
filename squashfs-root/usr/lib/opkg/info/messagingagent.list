@@ -1,0 +1,10 @@
+/usr/share/messaging/messaging.conf
+/usr/bin/matool
+/etc/config/messaging
+/etc/init.d/messagingagent.sh
+/etc/ssl/certs/ca-mm.crt
+/lib/config_post_ota/messagingagent_broker_update.sh
+/usr/share/messaging/serverkey_2.pub
+/usr/share/messaging/serverkey.pub
+/usr/bin/messagingagent
+/usr/bin/mald

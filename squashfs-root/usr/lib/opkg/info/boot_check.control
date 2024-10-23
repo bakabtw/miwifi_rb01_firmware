@@ -1,0 +1,8 @@
+Package: boot_check
+Version: 1-1.1
+Depends: libc, libssp, librt, libpthread
+Source: package/miwifi/boot_check
+Section: net
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 12135
+Description:  check boot successfully?

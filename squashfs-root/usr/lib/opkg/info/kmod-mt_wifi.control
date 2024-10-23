@@ -1,0 +1,8 @@
+Package: kmod-mt_wifi
+Version: 4.4.198+TEST-1
+Depends: kernel (=4.4.198-1-d58a23baedf3e4c63ac47c9358649fa1), wifi-profile, kmod-mediatek_hnat
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/drivers/mt_wifi
+Section: kernel
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 3040274
+Description:  MTK wifi AP driver

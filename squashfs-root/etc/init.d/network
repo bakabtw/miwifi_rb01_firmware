@@ -1,0 +1,232 @@
+#!/bin/sh /etc/rc.common
+
+START=20
+STOP=90
+
+USE_PROCD=1
+
+EXTRA_COMMANDS="reconfig_switch"
+
+reconfig_switch() {
+	setup_switch() { return 0; }
+
+	include /lib/network
+	setup_switch
+}
+
+set_mac() {
+	local device=$1
+	local name
+
+	config_get name $device name
+
+	case "$name" in
+
+	"eth0")
+		local lan_mac=$(getmac lan)
+		[ -z "$lan_mac" ] && return
+		uci set network.$device.macaddr="$lan_mac"
+		uci set network.lan.macaddr="$lan_mac"
+		uci commit
+		;;
+
+	"eth1")
+		# mac clone
+		local wan_mac=$(uci -q get network.wan.macaddr)
+		[ -z "$wan_mac" ] && {
+			wan_mac=$(getmac wan)
+			[ -z "$wan_mac" ] && return
+		}
+		uci set network.$device.macaddr="$wan_mac"
+		uci commit
+		;;
+	*) ;;
+
+	esac
+}
+
+init_switch() {
+	setup_switch() { return 0; }
+
+	include /lib/network
+	setup_switch
+
+	[ -f "/sys/class/leds/led_phy/brightness" ] && {
+		local phy_led=$(cat /sys/class/leds/led_phy/brightness)
+		[ "$phy_led" != "1" ] && echo 1 >/sys/class/leds/led_phy/brightness
+	}
+
+	# adjust phy drive current to 4mA
+	# E8[bit 30] E4[bit 30] : drive current
+	# 2'b00 : 4mA
+	# 2'b01 : 8mA
+	# 2'b10 : 12mA
+	# 2'b11 : 16mA
+	E4=$(regs d 0x10211960 | grep Value | awk '{print $5}' 2>/dev/null)
+	E8=$(regs d 0x10211970 | grep Value | awk '{print $5}' 2>/dev/null)
+	# E4[bit 30] set to 0
+	E4=$((${E4} & ~(0x1 << 30)))
+	regs w 0x10211960 $(printf '0x%x' ${E4})
+	# E8[bit 30] set to 0
+	E8=$((${E8} & ~(0x1 << 30)))
+	regs w 0x10211970 $(printf '0x%x' ${E8})
+
+	# adjust phy rise time and fail time to pass eye diagram test
+	for i in 0 1 2 3 4; do
+		switch phy cl45 w $i 0x1e 0x1 0x1b7
+		switch phy cl45 w $i 0x1e 0x7 0x3ba
+		switch phy cl45 w $i 0x1e 0x4 0x200
+		switch phy cl45 w $i 0x1e 0xA 0x0
+	done
+
+	config_load network
+	config_foreach set_mac device
+}
+
+init_arch() {
+	network_init_arch() { return 0; }
+
+	include /lib/network
+	network_init_arch
+
+	. /lib/xq-misc/arch_function_lib.sh
+	arch_restart_hnat
+}
+
+start_service() {
+	init_switch
+	init_arch
+
+	#update ip account switch
+	[ -f /proc/sys/net/ipv4/ipaccount/enable_ipaccount ] && {
+		ap_mode=$(uci -q get xiaoqiang.common.NETMODE)
+		if [ "$ap_mode" = "lanapmode" -o "$ap_mode" = "wifiapmode" -o "$ap_mode" = "whc_re" ]; then
+			echo 0 >/proc/sys/net/ipv4/ipaccount/enable_ipaccount
+		else
+			echo 1 >/proc/sys/net/ipv4/ipaccount/enable_ipaccount
+		fi
+	}
+
+	procd_open_instance
+	procd_set_param command /sbin/netifd
+	procd_set_param respawn
+	procd_set_param watch network.interface
+	#	[ -e /proc/sys/kernel/core_pattern ] && {
+	#		procd_set_param limits core="unlimited"
+	#	}
+	procd_close_instance
+}
+
+reload_service() {
+	local rv=0
+
+	init_switch
+	ubus call network reload || rv=1
+	/sbin/wifi reload_legacy
+	return $rv
+}
+
+stop_service() {
+	/sbin/wifi down
+	ifdown -a
+	sleep 1
+}
+
+service_running() {
+	ubus -t 30 wait_for network.interface
+	flock -u 1000
+	/sbin/wifi reload_legacy
+}
+
+validate_atm_bridge_section() {
+	uci_validate_section network "atm-bridge" "${1}" \
+		'unit:uinteger:0' \
+		'vci:range(32, 65535):35' \
+		'vpi:range(0, 255):8' \
+		'atmdev:uinteger:0' \
+		'encaps:or("llc", "vc"):llc' \
+		'payload:or("bridged", "routed"):bridged'
+}
+
+validate_route_section() {
+	uci_validate_section network route "${1}" \
+		'interface:string' \
+		'target:cidr4' \
+		'netmask:netmask4' \
+		'gateway:ip4addr' \
+		'metric:uinteger' \
+		'mtu:uinteger' \
+		'table:or(range(0,65535),string)'
+}
+
+validate_route6_section() {
+	uci_validate_section network route6 "${1}" \
+		'interface:string' \
+		'target:cidr6' \
+		'gateway:ip6addr' \
+		'metric:uinteger' \
+		'mtu:uinteger' \
+		'table:or(range(0,65535),string)'
+}
+
+validate_rule_section() {
+	uci_validate_section network rule "${1}" \
+		'in:string' \
+		'out:string' \
+		'src:cidr4' \
+		'dest:cidr4' \
+		'tos:range(0,31)' \
+		'mark:string' \
+		'invert:bool' \
+		'lookup:or(range(0,65535),string)' \
+		'goto:range(0,65535)' \
+		'action:or("prohibit", "unreachable", "blackhole", "throw")'
+}
+
+validate_rule6_section() {
+	uci_validate_section network rule6 "${1}" \
+		'in:string' \
+		'out:string' \
+		'src:cidr6' \
+		'dest:cidr6' \
+		'tos:range(0,31)' \
+		'mark:string' \
+		'invert:bool' \
+		'lookup:or(range(0,65535),string)' \
+		'goto:range(0,65535)' \
+		'action:or("prohibit", "unreachable", "blackhole", "throw")'
+}
+
+validate_switch_section() {
+	uci_validate_section network switch "${1}" \
+		'name:string' \
+		'enable:bool' \
+		'enable_vlan:bool' \
+		'reset:bool'
+}
+
+validate_switch_vlan() {
+	uci_validate_section network switch_vlan "${1}" \
+		'device:string' \
+		'vlan:uinteger' \
+		'ports:list(ports)'
+}
+
+service_triggers() {
+	procd_add_reload_trigger network wireless
+
+	procd_open_validate
+	validate_atm_bridge_section
+	validate_route_section
+	[ -e /proc/sys/net/ipv6 ] && validate_route6_section
+	validate_rule_section
+	[ -e /proc/sys/net/ipv6 ] && validate_rule6_section
+	validate_switch_section
+	validate_switch_vlan
+	procd_close_validate
+}
+
+shutdown() {
+	ifdown -a
+	sleep 1
+}

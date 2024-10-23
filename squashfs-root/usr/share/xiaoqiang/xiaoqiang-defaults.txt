@@ -1,0 +1,43 @@
+bootcmd=bootxq
+bootdelay=5
+ipaddr=192.168.31.1
+serverip=192.168.31.100
+stdin=serial
+stdout=serial
+stderr=serial
+uart_en=0
+telnet_en=0
+boot_wait=off
+restore_defaults=0
+wl0_ssid=Xiaomi_5G
+wl1_ssid=Xiaomi
+wl0_radio=1
+wl1_radio=1
+model=RB01
+flag_boot_type=2
+mode=Router
+no_wifi_dev_times=0
+arch=arm
+baudrate=115200
+board=mt7622_evb
+board_name=mt7622_evb
+boot_auto=bootxq
+boot_fw0=run boot_rd_img;bootm
+boot_fw1=run boot_rd_img2;bootm
+boot_rd_img=nand read ${loadaddr} 0x2C0000 2000;image_blks 2048;nand read ${loadaddr} 0x2C0000 ${img_align_size}
+boot_rd_img2=nand read ${loadaddr} 0x20C0000 2000;image_blks 2048;nand read ${loadaddr} 0x20C0000 ${img_align_size}
+bootmenu_0=1. Load firmware 0 and bootup.=run boot_fw0
+bootmenu_1=2. Load firmware 1 and bootup.=run boot_fw1
+bootmenu_2=3. Load firmware selected by Xiaoqiang and bootup.=run boot_auto
+bootmenu_delay=30
+cpu=armv7
+ethact=mtk_eth
+ethaddr=00:0C:E7:11:22:33
+fdt_high=0x6c000000
+invaild_env=no
+loadaddr=0x4007FF28
+soc=mt7622
+stderr=serial
+stdin=serial
+stdout=serial
+vendor=mediatek

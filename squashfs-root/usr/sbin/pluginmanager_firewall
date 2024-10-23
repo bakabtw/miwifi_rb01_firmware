@@ -1,0 +1,23 @@
+#!/bin/sh
+
+PLUGINS_ROOT='/userdisk/appdata'
+SCRIPTS_DIR="${PLUGINS_ROOT}/*/"
+
+function plugins_firewall_reload() {
+    if [ -d ${PLUGINS_ROOT} ]; then
+        find ${SCRIPTS_DIR} -type f -name "firewall.sh" -exec sh -c 'sh $1 reload' _ {} \;
+    fi
+}
+
+cmd=$1
+case $cmd in
+    "reload")
+        plugins_firewall_reload
+    ;;
+
+    *)
+        echo "plugin_firewall: not support cmd: $cmd"
+        exit -1
+    ;;
+esac
+

@@ -1,0 +1,56 @@
+#!/bin/sh
+
+misc_miot_ifname=$(uci -q get misc.wireless.iface_miot_2g_ifname)
+wl_miot_ifname=$(uci -q get wireless.miot_2G.ifname)
+net_miot_ifname=$(uci -q get network.miot.ifname)
+
+rebuild_wireless_miot_cfg()
+{
+    uci set wireless.miot_2G=wifi-iface
+    uci set wireless.miot_2G.device='MT7622_1'
+    uci set wireless.miot_2G.ifname="${misc_miot_ifname}"
+    uci set wireless.miot_2G.network='miot'
+    uci set wireless.miot_2G.mode='ap'
+    uci set wireless.miot_2G.ssid='25c829b1922d3123_miwifi'
+    uci set wireless.miot_2G.disabled='1'
+    uci set wireless.miot_2G.encryption='none'
+    uci set wireless.miot_2G.wmm='1'
+    uci set wireless.miot_2G.hidden='1'
+    uci set wireless.miot_2G.vifidx='3'
+    uci set wireless.miot_2G.MbssMaxStaNum='64'
+    uci set wireless.miot_2G.userswitch='1'
+    uci commit
+}
+
+rebuild_network_miot_cfg()
+{
+
+    internet_en=$(uci -q get vlan_service.Internet.enable)
+    iptv_en=$(uci -q get vlan_service.Multimedia.enable)
+    wan_if=$(uci -q get network.wan.ifname)
+    [ ${internet_en:=0} = 0 -a ${iptv_en:=0} = 1 ] && {
+        [ "${wan_if:=eth1}" != "eth1" ] && vlan_service.sh restart false
+    }
+
+    uci set network.miot=interface
+    uci set network.miot.ifname="${misc_miot_ifname}"
+    uci set network.miot.type='bridge'
+    uci set network.miot.proto='static'
+    uci set network.miot.ipaddr='192.168.32.1'
+    uci set network.miot.netmask='255.255.255.0'
+    uci commit
+}
+
+if [ "$misc_miot_ifname" != "$wl_miot_ifname" ]; then
+    echo "rebuild wireless miot "
+    rebuild_wireless_miot_cfg
+else
+    echo "wireless miot OK"
+fi
+
+if [ "$misc_miot_ifname" != "$net_miot_ifname" ]; then
+    echo "rebuild network miot"
+    rebuild_network_miot_cfg
+else
+    echo "network miot OK"
+fi

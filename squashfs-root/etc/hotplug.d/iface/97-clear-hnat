@@ -1,0 +1,23 @@
+#!/bin/sh
+[ "$ACTION" = "ifup" ] && {
+    if [ ${INTERFACE:7:5} = "eth0_" ]; then
+        mode=$(uci -q get xiaoqiang.common.NETMODE)
+        if [ ${mode} = "whc_re" ]; then
+            if [ ${INTERFACE} = "ppd_if" ]; then
+                ppd_if=$(uci get -q network.ppd_if.ifname)
+                echo ${ppd_if} >/sys/kernel/debug/hnat/hnat_ppd_if
+            fi
+        else
+            for i in $(uci get -q network.lan.ifname); do
+                if [ ${INTERFACE:12} = ${i:5} ]; then
+                    echo ${i} >/sys/kernel/debug/hnat/hnat_ppd_if
+                fi
+            done
+        fi
+    fi
+}
+
+[ "$ACTION" = "ifdown" ] && [ "$INTERFACE" = "wan" ] && {
+    . /lib/xq-misc/arch_function_lib.sh
+    arch_restart_hnat
+}

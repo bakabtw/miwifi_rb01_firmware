@@ -1,0 +1,16 @@
+/etc/wireless/mediatek/mt7915.slt.b1.dat
+/etc/wireless/mediatek/wifi_cert.1.dat
+/lib/wifi/wifi_services.lua
+/lib/wifi/mt7615e.lua
+/etc/wireless/l1profile.dat
+/etc/wireless/mediatek/wifi_cert.2.dat
+/etc/wireless/mediatek/version
+/etc/wireless/mediatek/mt7615e-sku.dat
+/etc/rc.button/wps
+/etc/wireless/mediatek/mt7615e.eeprom.bin
+/etc/wireless/mediatek/mt7622.1.dat
+/etc/wireless/mediatek/mt7915.1.dat
+/etc/init.d/firmware.sh
+/etc/wireless/mediatek/mt7615e-sku-bf.dat
+/etc/wireless/mediatek/mt7915.2.dat
+/etc/wireless/mediatek/mt7915.slt.b0.dat

@@ -1,0 +1,3 @@
+/etc/config/otapred
+/lib/config_post_ota/predownload-post_ota.sh
+/usr/sbin/otapredownload

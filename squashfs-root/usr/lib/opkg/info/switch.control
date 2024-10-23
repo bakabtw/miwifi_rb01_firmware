@@ -1,0 +1,8 @@
+Package: switch
+Version: 1
+Depends: libc, libssp, librt, libpthread, libnl-tiny
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/switch
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 28968
+Description:  An program to config switch.

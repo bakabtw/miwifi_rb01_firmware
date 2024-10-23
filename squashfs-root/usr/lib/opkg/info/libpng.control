@@ -1,0 +1,10 @@
+Package: libpng
+Version: 1.6.34-1
+Depends: libc, libssp, librt, libpthread, zlib
+Source: feeds/packages/libs/libpng
+License: Libpng GPL-2.0+ BSD-3-Clause
+Section: libs
+Maintainer: Jo-Philipp Wich <jo@mein.io>
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 88946
+Description:  A PNG format files handling library

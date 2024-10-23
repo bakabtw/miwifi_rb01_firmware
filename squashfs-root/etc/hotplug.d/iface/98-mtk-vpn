@@ -1,0 +1,11 @@
+#!/bin/sh
+
+proto=`uci -q get network.$INTERFACE.proto`
+
+if [ "$proto" = l2tp ] || [ "$proto" = pptp ]; then
+	if [ "$ACTION" = ifup ]; then
+		. /lib/xq-misc/arch_function_lib.sh;arch_stop_hnat
+	elif [ "$ACTION" = ifdown ]; then
+		. /lib/xq-misc/arch_function_lib.sh;arch_start_hnat
+	fi
+fi

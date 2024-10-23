@@ -1,0 +1,9 @@
+Package: uboot-mtk
+Version: 6.0.4-1
+Depends: libc, libssp, librt, libpthread, base-files, xiaoqiang-util
+Source: package/miwifi/system/uboot-mtk
+Section: boot
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 105
+Description:  U-Boot for MTK platforms.
+ Currently used on MiWiFi R3P R3G R4 RB01 RB03.

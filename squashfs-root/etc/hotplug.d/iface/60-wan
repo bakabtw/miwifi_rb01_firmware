@@ -1,0 +1,93 @@
+#!/bin/sh
+
+logger -p notice -t "hotplug.d" "60-wan: run because of $INTERFACE $ACTION"
+
+[ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ] && {
+    . /lib/network/config.sh
+    [ -f /usr/sbin/smartdns.lua ] && /usr/bin/lua /usr/sbin/smartdns.lua &
+    ubus_call network.interface.wan status
+    json_select "route"
+    __idx=1
+    while json_is_a "$__idx" object; do
+        json_select "$((__idx++))"
+        json_get_var target "target"
+        json_get_var mask "mask"
+        json_get_var nexthop "nexthop"
+        route add -net $target/$mask gw $nexthop metric 50
+        json_select ".."
+    done
+	
+	[ "$(uci -q get xiaoqiang.common.INITTED)" != "YES" ] && {
+		lan_ip=$(uci -q get network.lan.ipaddr)
+		lan_mask=$(uci -q get network.lan.netmask)
+		[ -n "$lan_ip" -a -n "$lan_mask" -a -n "$nexthop" ] && {
+			lan_ip_num=$(echo "$lan_ip" | awk '{c=256;split($0,ip,".");print ip[4]+ip[3]*c+ip[2]*c^2+ip[1]*c^3}')
+			lan_mask_num=$(echo "$lan_mask" | awk '{c=256;split($0,ip,".");print ip[4]+ip[3]*c+ip[2]*c^2+ip[1]*c^3}')
+			gw_ip_num=$(echo "$nexthop" | awk '{c=256;split($0,ip,".");print ip[4]+ip[3]*c+ip[2]*c^2+ip[1]*c^3}')
+			
+			# lan and wan in the same net
+			[ "$((lan_ip_num&lan_mask_num))" == "$((gw_ip_num&lan_mask_num))" ] && {
+				wan_ifname=$(uci -q get network.wan.ifname)
+				[ -n "$wan_ifname" ] && {
+					echo "$nexthop" > /tmp/wan_gw_ip
+					route add -net $nexthop netmask 255.255.255.255 dev "$wan_ifname"
+				}				
+			}
+		}
+	} || {
+		[ -e "/tmp/wan_gw_ip" ] && {
+			wan_gw_ip=$(cat /tmp/wan_gw_ip)
+			[ -n "$wan_gw_ip" ] && {
+				wan_ifname=$(uci -q get network.wan.ifname)
+				[ -n "$wan_ifname" ] && route del -net $wan_gw_ip netmask 255.255.255.255 dev "$wan_ifname"
+			}
+			rm -rf /tmp/wan_gw_ip
+		}			
+	}
+}
+
+mode=$(uci -q get ipv6.settings.mode)
+
+[ "$INTERFACE" = "wan_6" -a "$mode" = "static" ] && {
+	#flush all deprecated address
+	ip -6 address flush scope global deprecated dynamic
+
+	wan6_old=$(ip -6 route | grep "default via" | awk 'NR==1 {print $3}')
+	if [ "$ACTION" == "ifup" ]; then
+		wan6_cfg=$(uci -q get ipv6.settings.ip6gw)
+		cur_ifname=$(uci -q get network.wan.ifname)
+		cur_proto=$(uci -q get network.wan.proto)
+		[ "$cur_proto" == "pppoe" ] && cur_ifname=pppoe-wan
+
+		if [ -n "$wan6_old" -a "$wan6_cfg" != "$wan6_old" ]; then
+			ip -6 route del default via $wan6_old
+		fi
+		if !(expr match "${wan6_cfg}" "fe80"); then
+			ip -6 route add $wan6_cfg dev $cur_ifname
+		fi
+		ip -6 route add default via $wan6_cfg dev $cur_ifname
+		ip -6 route del $wan6_cfg dev $cur_ifname
+	elif [ "$ACTION" == "ifdown" -a -n $wan6_old ]; then
+		ip -6 route del default via $wan6_old
+	fi
+}
+
+[ "$INTERFACE" = "wan_6" ] && [ "$mode" = "native" -o "$mode" = "nat" ] && {
+	#flush all deprecated address
+	ip -6 address flush scope global deprecated dynamic
+
+	res=$(ip -6 route | grep "default from")
+	wan6_gw=$(echo $res | awk 'NR==1 {print $5}')
+	wan6_itf=$(echo $res | awk 'NR==1 {print $7}')
+	[ -z "$wan6_gw" -o -z "$wan6_itf" ] && return
+
+	wan6_old=$(ip -6 route | grep "default via" | awk 'NR==1 {print $3}')
+	if [ "$ACTION" == "ifup" ]; then
+		[ -n "$wan6_old" ] && ip -6 route del default via $wan6_old
+		ip -6 route add default via $wan6_gw dev $wan6_itf
+	elif [ "$ACTION" == "ifupdate" ]; then
+		ip -6 route change default via $wan6_gw dev $wan6_itf
+	elif [ "$ACTION" == "ifdown" -a -n $wan6_old ]; then
+		ip -6 route del default via $wan6_old
+	fi
+}

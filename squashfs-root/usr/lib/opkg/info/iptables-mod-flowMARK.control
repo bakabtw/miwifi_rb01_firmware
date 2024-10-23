@@ -1,0 +1,9 @@
+Package: iptables-mod-flowMARK
+Version: 2.10-1
+Depends: libc, libssp, librt, libpthread, iptables, kmod-ipt-flowMARK
+Source: feeds/packages/net/xtables-addons
+Section: net
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 2336
+Description:  flowMARK iptables extension

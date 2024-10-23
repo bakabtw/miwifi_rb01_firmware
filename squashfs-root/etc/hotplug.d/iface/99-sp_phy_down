@@ -1,0 +1,10 @@
+#!/bin/ash
+
+if [ "$ACTION" != "ifdown" ]; then
+	exit 0
+fi
+
+if [ "$INTERFACE" == "wan" -o "$INTERFACE" == "lan" ]; then
+	sp_log_info.sh -k net.phy.down -m "$INTERFACE:1"
+fi
+

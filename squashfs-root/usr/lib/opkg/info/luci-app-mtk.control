@@ -1,0 +1,8 @@
+Package: luci-app-mtk
+Version: 1
+Depends: libc, libssp, librt, libpthread, datconf-lua
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/luci-app-mtk
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 27049
+Description:  mtk luci app

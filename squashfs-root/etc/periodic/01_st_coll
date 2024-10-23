@@ -1,0 +1,37 @@
+#!/bin/ash
+
+readonly COLLS_DIR="/etc/sp_lib/colls"
+readonly REGEX_TYPE="^(1min|10min|hourly|daily)$"
+
+check_type() {
+	echo "$1" | grep -qsE "$REGEX_TYPE"
+}
+
+coll_info() {
+	local _file=$1
+	local _name=${_file##*/}
+	local _key=
+
+	# Get key from file name
+	_key=${_name%%_*}
+
+	# Run script and log result
+	sh "$_file" \
+		| xargs -r -n 1 sp_log_info.sh -p -k "$_key" -m
+}
+
+find_colls() {
+	local _type=$1
+	local _file=
+
+	find "$COLLS_DIR" -type f -name "*_${_type}.sh" \
+		| while read -r _file; do
+			coll_info "$_file"
+		done
+}
+
+if ! check_type "$1"; then
+	exit 0
+fi
+
+find_colls "$1"

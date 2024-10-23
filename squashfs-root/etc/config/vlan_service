@@ -1,0 +1,49 @@
+config service Internet
+    option enable '0'
+    option profile '0'
+    
+config service Multimedia
+    option enable '0'
+    option profile '0'
+
+config type iptv
+    option vid '-1'
+    option priority '-1'
+    option wan_egress_tag '1'
+    option lan_egress_tag '0'
+
+config type voip
+    option vid '-1'
+    option priority '-1'
+    option wan_egress_tag '1'
+    option lan_egress_tag '0'
+
+config type internet
+    option vid '-1'
+    option priority '-1'
+    option wan_egress_tag '1'
+    option lan_egress_tag '0'
+
+config type bridge
+    option vid '-1'
+    option priority '-1'
+    option wan_egress_tag '1'
+    option lan_egress_tag '0'
+
+config interface lan1
+    option type 'internet'
+    option port '2'
+    option switch '0'
+    option eth '0'
+
+config interface lan2
+    option type 'internet'
+    option port '3'
+    option switch '0'
+    option eth '0'
+
+config interface lan3
+    option type 'internet'
+    option port '4'
+    option switch '0'
+    option eth '0'

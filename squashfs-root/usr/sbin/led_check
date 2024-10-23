@@ -1,0 +1,5 @@
+#!/bin/sh
+# Turn off led if configured
+
+led=`uci get xiaoqiang.common.BLUE_LED 2&>/dev/null`
+[ "$led" = "0" ] && xqled off

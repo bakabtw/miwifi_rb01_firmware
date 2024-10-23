@@ -1,0 +1,9 @@
+Package: luci-mod-admin-rb01
+Version: 0.11.1-1
+Depends: libc, libssp, librt, libpthread, luci-mod-admin-core, luci-lib-ipkg
+Source: feeds/luci/luci
+Section: luci
+Maintainer: LuCI Development Team <luci@lists.subsignal.org>
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 243639
+Description:  LuCI Administration - rb01-featured for full control

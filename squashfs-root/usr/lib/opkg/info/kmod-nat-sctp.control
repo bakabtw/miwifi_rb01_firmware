@@ -1,0 +1,10 @@
+Package: kmod-nat-sctp
+Version: 4.4.198-1
+Depends: kernel (=4.4.198-1-d58a23baedf3e4c63ac47c9358649fa1), kmod-ipt-core, kmod-ipt-ct-sctp, kmod-ipt-nat, kmod-lib-crc32c
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 1242
+Description:  Kernel modules for sctp nat

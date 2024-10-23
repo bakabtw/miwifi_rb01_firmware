@@ -1,0 +1,8 @@
+Package: kmod-8021q_tag
+Version: 4.4.198+1.0-1.0
+Depends: kernel (=4.4.198-1-d58a23baedf3e4c63ac47c9358649fa1)
+Source: package/miwifi/vlan_service
+Section: kernel
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 2946
+Description:  Kernel module for enable 8021q tag.

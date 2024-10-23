@@ -1,0 +1,9 @@
+Package: kmod-ipt-flowMARK
+Version: 4.4.198+2.10-1
+Depends: kernel (=4.4.198-1-d58a23baedf3e4c63ac47c9358649fa1), kmod-ipt-core, kmod-ipt-compat-xtables
+Source: feeds/packages/net/xtables-addons
+Section: kernel
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 6366
+Description:  flowMARK netfilter module

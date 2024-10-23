@@ -1,0 +1,8 @@
+Package: uci2dat
+Version: 1
+Depends: libc, libssp, librt, libpthread, libuci
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/uci2dat
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 8295
+Description:  Translate uci config into ralink wifi dat format

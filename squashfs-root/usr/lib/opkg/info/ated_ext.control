@@ -1,0 +1,8 @@
+Package: ated_ext
+Version: 2
+Depends: libc, libssp, librt, libpthread
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/ated_ext
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 13947
+Description:  ated_ext Daemon
