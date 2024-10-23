@@ -1,0 +1,5 @@
+/etc/logrotate.d/stat_points
+/etc/logrotate.d/messages
+/usr/sbin/syslog_sync.sh
+/etc/init.d/milog
+/etc/logrotate.d/wifi_analysis

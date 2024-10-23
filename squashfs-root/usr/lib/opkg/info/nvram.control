@@ -1,0 +1,10 @@
+Package: nvram
+Version: 1-1
+Depends: libc, libssp, librt, libpthread
+Source: package/utils/nvram
+Section: utils
+Maintainer: Xiaomi Communications technology
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 5162
+Description:  This package contains an utility to manipulate uboot parameter from linux.
+ It invoke kernel api to implement functions.

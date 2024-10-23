@@ -1,0 +1,8 @@
+/usr/share/messaging/messaging.conf
+/usr/bin/matool
+/etc/config/messaging
+/etc/init.d/messagingagent.sh
+/usr/share/messaging/serverkey_2.pub
+/usr/share/messaging/serverkey.pub
+/usr/bin/messagingagent
+/usr/bin/mald

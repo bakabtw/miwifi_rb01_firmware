@@ -1,0 +1,8 @@
+/sbin/ap_info_report_to_trafficd.lua
+/etc/config/traffic
+/etc/init.d/trafficd
+/etc/iwevent.d/02-notify_trafficd.sh
+/usr/sbin/trafficd
+/etc/traffic.d/device/02-chk_newsta_onre_call.sh
+/sbin/device_event_call
+/etc/hotplug.d/iface/77-traffic

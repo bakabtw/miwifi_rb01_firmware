@@ -1,0 +1,11 @@
+Package: libmbedtls
+Version: 2.16.3-1
+Depends: libc, libssp, librt, libpthread
+Source: package/libs/mbedtls
+License: GPL-2.0+
+Section: libs
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 246886
+Description:  The aim of the mbedtls project is to provide a quality, open-source
+ cryptographic library written in C and targeted at embedded systems.
+ This package contains the mbedtls library.

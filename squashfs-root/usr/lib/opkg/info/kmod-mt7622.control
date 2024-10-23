@@ -1,0 +1,8 @@
+Package: kmod-mt7622
+Version: 4.4.198+TEST-1
+Depends: kernel (=4.4.198-1-ab6c383162bc9d302ba115c6bf6c66a4), wifi-profile, kmod-mediatek_hnat
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/drivers/mt7622
+Section: kernel
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 1711895
+Description:  MTK wifi APSOC driver

@@ -1,0 +1,8 @@
+Package: regs
+Version: 1
+Depends: libc, libssp, librt, libpthread
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/regs
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 2760
+Description:  Simple program to read/write from/to a pci device from userspace.

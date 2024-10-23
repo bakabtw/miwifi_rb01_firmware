@@ -1,0 +1,8 @@
+Package: miwifi-discovery
+Version: 0
+Depends: libc, libssp, librt, libpthread, libubus, libblobmsg-json, libubox, libmtknetlink
+Source: package/miwifi/miwifi-discovery
+Section: net
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 6805
+Description:  MiWiFi new router discovery

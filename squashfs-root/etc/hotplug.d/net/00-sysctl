@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if [ "$ACTION" = add ]; then
+	if [ ${DEVICENAME:0:5} = "eth0." ]; then
+		mode=$(uci -q get xiaoqiang.common.NETMODE)
+		if [ ${mode} = "whc_re" ]; then
+			ppd_if=$(uci get -q network.ppd_if.ifname)
+			if [ ${DEVICENAME} = ${ppd_if} ]; then
+				echo ${DEVICENAME} >/sys/kernel/debug/hnat/hnat_ppd_if
+			fi
+		else
+			for i in $(uci get -q network.lan.ifname); do
+				if [ ${DEVICENAME} = ${i} ]; then
+					echo ${DEVICENAME} >/sys/kernel/debug/hnat/hnat_ppd_if
+				fi
+			done
+		fi
+	fi
+	for CONF in /etc/sysctl.d/*.conf /etc/sysctl.conf; do
+		[ ! -f "$CONF" ] && continue
+		sed -ne "/^[[:space:]]*net\..*\.$DEVICENAME\./p" "$CONF" |
+			sysctl -e -p - | logger -t sysctl
+	done
+fi

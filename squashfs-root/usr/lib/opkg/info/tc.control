@@ -1,0 +1,8 @@
+Package: tc
+Version: 3.3.0-2
+Depends: libc, libssp, librt, libpthread, kmod-sched-core
+Source: package/network/utils/iproute2
+Section: net
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 44201
+Description:  Traffic control utility

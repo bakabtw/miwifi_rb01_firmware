@@ -1,0 +1,9 @@
+Package: kmod-ipt-compat-xtables
+Version: 4.4.198+2.10-1
+Depends: kernel (=4.4.198-1-ab6c383162bc9d302ba115c6bf6c66a4), kmod-ipt-core, kmod-ip6tables
+Source: feeds/packages/net/xtables-addons
+Section: kernel
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 805
+Description:  API compatibilty layer netfilter module

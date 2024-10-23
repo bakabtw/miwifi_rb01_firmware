@@ -1,0 +1,9 @@
+Package: bridge
+Version: 1.5-1
+Depends: libc, libssp, librt, libpthread
+Source: package/network/utils/bridge-utils
+Section: net
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 8933
+Description:  Manage ethernet bridging: a way to connect networks together to 
+ form a larger network.

@@ -1,0 +1,8 @@
+Package: vlan_service
+Version: 1.0-1.0
+Depends: libc, libssp, librt, libpthread
+Source: package/miwifi/vlan_service
+Section: data
+Architecture: all
+Installed-Size: 7419
+Description:  vlan_service

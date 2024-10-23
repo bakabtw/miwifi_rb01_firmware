@@ -1,0 +1,8 @@
+Package: malloctest
+Version: 1
+Depends: libc, libssp, librt, libpthread, libpthread
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/malloctest
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 4382
+Description:  This is a sample daemon for test and verify function for malloc.

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if [ "$ACTION" = add ]; then
+	if [ ${DEVICENAME:0:5} = "eth0." -o ${DEVICENAME:0:5} = "eth1." ]; then
+		priority=$(uci -q get network.ifname_${DEVICENAME:0:4}_${DEVICENAME:5}.priority)
+		[ -n ${priority} ] && {
+			vconfig set_egress_map ${DEVICENAME} 0 ${priority}
+			vconfig set_ingress_map ${DEVICENAME} 0 ${priority}
+		}
+	fi
+fi

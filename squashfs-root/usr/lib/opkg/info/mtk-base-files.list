@@ -1,0 +1,8 @@
+/etc/banner.mtk
+/etc/kernel.config
+/usr/lib/lua/shuci.lua
+/usr/sbin/hwnat-disable.sh
+/etc/hotplug.d/firmware/11-mtk-wifi-e2p
+/etc/openwrt.config
+/etc/sdk.version
+/usr/sbin/hwnat-enable.sh

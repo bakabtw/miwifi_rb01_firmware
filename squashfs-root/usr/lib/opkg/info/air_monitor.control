@@ -1,0 +1,8 @@
+Package: air_monitor
+Version: 1
+Depends: libc, libssp, librt, libpthread
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/air_monitor
+Section: MTK Properties
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 3784
+Description:  This is a sample daemon for test and verify function for Air Monitor in Driver.

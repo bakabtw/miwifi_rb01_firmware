@@ -1,0 +1,60 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+
+#EXTRA_COMMANDS=" check_ip"
+
+check_ip()
+{
+    local IP=$1
+    local VALID_CHECK=$(echo $IP|awk -F. '$1<=255&&$2<=255&&$3<=255&&$4<=255{print "yes"}')
+
+    if echo $IP|grep -E "^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$" >/dev/null; then
+        if [ $VALID_CHECK == "yes" ]; then
+            echo 0 && return
+        else
+            echo 1 && return
+        fi
+    else
+        echo 1 && return
+    fi
+}
+
+boot()
+{
+    local delay_sec=1
+    local wanproto=$(uci -q get network.wan.proto)
+    [ "$wanproto" = "pppoe" ] && delay_sec=25
+
+    local vpn_server=$(uci -q get network.vpn.server)
+    local valid_ip=$(check_ip $vpn_server)
+    [ "$valid_ip" != "0" ] && delay_sec=$(($delay_sec + 15))
+
+    (sleep $delay_sec; start) &
+}
+
+start()
+{
+    local mode=$(uci -q get xiaoqiang.common.NETMODE)
+    [ "$mode" == "wifiapmode" -o "$mode" == "lanapmode" -o "$mode" == "whc_re" ] && return 0
+    [ ! -f "/usr/sbin/vpn.lua" ] && return 0
+    [ -f /tmp/vpn_click_disconnect ] && return 0
+
+    local vpnauto=$(uci -q get network.vpn.auto)
+    [ "$vpnauto" = "1" ] && {
+        local vpnproto=$(uci -q get network.vpn.proto)
+        local vpnstatus=$(ifstatus vpn | grep \"up\" | cut -d ' ' -f 2 | cut -d ',' -f 1)
+        [ "$vpnstatus" = "false" ] && {
+            echo "vpn boot:  restart vpn==============" > /dev/console
+            ifdown vpn
+            if [ "$vpnproto" = "pptp-vpn" ]; then
+                /usr/sbin/vpn.lua up
+            else
+                ifup vpn
+            fi
+        }
+    }
+
+    return 0
+}
+

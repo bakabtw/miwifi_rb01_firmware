@@ -1,0 +1,4 @@
+/lib/xqled/xqled_api.sh
+/usr/sbin/xqled
+/etc/init.d/xqled
+/lib/xqled/xqled_hal.sh

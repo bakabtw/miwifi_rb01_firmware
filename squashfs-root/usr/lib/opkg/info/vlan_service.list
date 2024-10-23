@@ -1,0 +1,5 @@
+/lib/xq-misc/vlan_service_product.sh
+/etc/hotplug.d/net/01-set_vlan_pri
+/usr/sbin/vlan_service.sh
+/etc/config/vlan_service
+/lib/modules/4.4.198/8021q_tag.ko

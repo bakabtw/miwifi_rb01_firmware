@@ -1,0 +1,14 @@
+#!/bin/sh
+
+ft_mode=`cat /proc/xiaoqiang/ft_mode`
+if [ 0 -ne "$ft_mode" ]; then
+	return
+fi
+
+if [ "$ACTION" = "pressed" -a "$BUTTON" = "wps" ]; then
+	echo "WPS Button Pressed........." > /dev/console
+	/sbin/wps pbc wl0
+	/sbin/wps pbc wl1
+fi
+
+return 0

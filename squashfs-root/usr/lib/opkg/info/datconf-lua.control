@@ -1,0 +1,9 @@
+Package: datconf-lua
+Version: 1.0.0-1
+Depends: libc, libssp, librt, libpthread, datconf, liblua
+Source: mtk_sdk/mtk-openwrt-lede-4.2.1.0/applications/datconf
+Section: MTK Properties
+Maintainer: Weijie Gao <weijie.gao@mediatek.com>
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 5184
+Description:  Lua plugin for datconf

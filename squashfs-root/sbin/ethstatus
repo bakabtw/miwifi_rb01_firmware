@@ -1,0 +1,16 @@
+#!/bin/sh
+
+wan_port=$(uci -q get misc.sw_reg.sw_wan_port)
+lan_ports=$(uci -q get misc.sw_reg.sw_lan_ports)
+otype=""
+
+for port in ${wan_port} ${lan_ports}; do
+    status=$(swconfig dev switch0 port $port get link | awk '{print $2}' 2>/dev/null)
+    [ "$port" = "$wan_port" ] && otype="wan" || otype=""
+
+    if [ "$status" = "link:up" ]; then
+        echo "port $port:up    $otype"
+    else
+        echo "port $port:down    $otype"
+    fi
+done

@@ -1,0 +1,8 @@
+Package: libmtknetlink
+Version: 1.0-1
+Depends: libc, libssp, librt, libpthread, libnl-tiny, libubox, libubox
+Source: package/miwifi/mtknetlink
+Section: net
+Architecture: aarch64_cortex-a53_neon-vfpv4
+Installed-Size: 10125
+Description:  miwifi mtk netlink library.
